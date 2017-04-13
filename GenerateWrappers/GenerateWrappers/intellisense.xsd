@@ -1,0 +1,85 @@
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="doc" type="docType"/>
+  <xs:complexType name="assemblyType">
+    <xs:sequence>
+      <xs:element type="xs:string" name="name"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="seeType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="cref" use="optional"/>
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="summaryType" mixed="true">
+    <xs:sequence>
+      <xs:element type="seeType" name="see" minOccurs="0"/>
+      <xs:element type="paramrefType" name="paramref" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="memberType">
+    <xs:sequence>
+      <xs:element type="summaryType" name="summary"/>
+      <xs:element type="returnsType" name="returns" minOccurs="0"/>
+      <xs:element type="paramType" name="param" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="exceptionType" name="exception" maxOccurs="unbounded" minOccurs="0"/>
+      <xs:element type="xs:byte" name="filterpriority" minOccurs="0"/>
+      <xs:element type="PermissionSetType" name="PermissionSet" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="exceptionType" mixed="true">
+    <xs:choice maxOccurs="unbounded" minOccurs="0">
+      <xs:element type="seeType" name="see"/>
+      <xs:element type="paramrefType" name="paramref"/>
+    </xs:choice>
+    <xs:attribute type="xs:string" name="cref" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="paramrefType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="name" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="returnsType" mixed="true">
+    <xs:sequence>
+      <xs:element type="seeType" name="see" minOccurs="0"/>
+      <xs:element type="paramrefType" name="paramref" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="paramType" mixed="true">
+    <xs:sequence>
+      <xs:element type="paramrefType" name="paramref" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute type="xs:string" name="name" use="optional"/>
+  </xs:complexType>
+  <xs:complexType name="IPermissionType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute type="xs:string" name="class" use="optional"/>
+        <xs:attribute type="xs:byte" name="version" use="optional"/>
+        <xs:attribute type="xs:string" name="Read" use="optional"/>
+        <xs:attribute type="xs:string" name="Unrestricted" use="optional"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+  <xs:complexType name="PermissionSetType">
+    <xs:sequence>
+      <xs:element type="IPermissionType" name="IPermission"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="membersType">
+    <xs:sequence>
+      <xs:element type="memberType" name="member" maxOccurs="unbounded" minOccurs="0"/>
+    </xs:sequence>
+  </xs:complexType>
+  <xs:complexType name="docType">
+    <xs:sequence>
+      <xs:element type="assemblyType" name="assembly"/>
+      <xs:element type="membersType" name="members"/>
+    </xs:sequence>
+  </xs:complexType>
+</xs:schema>
