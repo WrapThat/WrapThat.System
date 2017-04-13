@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package>
+  <metadata>
+    <id>WrapThat.System</id>
+    <version>0.1.1.0</version>
+    <title>WrapThat System</title>
+    <authors>Terje Sandstrom</authors>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Wrapper classes for System and System.IO for making unit testing easier</description>
+    <summary>With these classes you can make minimal changes to your code, in order to get it unit testable. Primary target is legacy code where you don't want to change too much, and cant use newer libraries</summary>
+    <language>en-US</language>
+    <releaseNotes>Initial early release</releaseNotes>
+    <dependencies>
+    </dependencies>
+    
+  </metadata>
+  <files>
+    <file src="Wrappers\bin\release\WrapThat.System.dll" target="lib\" />
+  </files>
+</package>

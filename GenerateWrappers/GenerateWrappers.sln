@@ -5,7 +5,14 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenerateWrappers", "GenerateWrappers\GenerateWrappers.csproj", "{34CB7563-DB02-4513-B468-FBA85E67A4C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wrappers", "Wrappers\Wrappers.csproj", "{37174AB8-C45D-42A4-A551-B3E4C60B4F8C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WrapThat", "Wrappers\WrapThat.csproj", "{37174AB8-C45D-42A4-A551-B3E4C60B4F8C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{28322A0E-D846-457B-BFEC-5786D2F136F3}"
+	ProjectSection(SolutionItems) = preProject
+		Pack.cmd = Pack.cmd
+		Upload.cmd = Upload.cmd
+		WrapThat.System.nuspec = WrapThat.System.nuspec
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

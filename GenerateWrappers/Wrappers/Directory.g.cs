@@ -7,8 +7,8 @@ public partial class Directory: IDirectory
 public System.IO.DirectoryInfo CreateDirectory(string path) => System.IO.Directory.CreateDirectory(path);
 public System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity) => System.IO.Directory.CreateDirectory(path,directorySecurity);
 public void Delete(string path) => System.IO.Directory.Delete(path);
-public void Delete(string path,System.Boolean recursive) => System.IO.Directory.Delete(path,recursive);
-public void Exists(string path) => System.IO.Directory.Exists(path);
+public void Delete(string path,bool recursive) => System.IO.Directory.Delete(path,recursive);
+public bool Exists(string path) => System.IO.Directory.Exists(path);
 public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path) => System.IO.Directory.GetAccessControl(path);
 public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections) => System.IO.Directory.GetAccessControl(path,includeSections);
 public System.DateTime GetCreationTime(string path) => System.IO.Directory.GetCreationTime(path);

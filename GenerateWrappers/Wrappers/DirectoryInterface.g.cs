@@ -7,8 +7,8 @@ public partial interface IDirectory
 System.IO.DirectoryInfo CreateDirectory(string path);
 System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity);
 void Delete(string path);
-void Delete(string path,System.Boolean recursive);
-void Exists(string path);
+void Delete(string path,bool recursive);
+bool Exists(string path);
 System.Security.AccessControl.DirectorySecurity GetAccessControl(string path);
 System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections);
 System.DateTime GetCreationTime(string path);

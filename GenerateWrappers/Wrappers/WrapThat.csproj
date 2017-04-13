@@ -7,10 +7,11 @@
     <ProjectGuid>{37174AB8-C45D-42A4-A551-B3E4C60B4F8C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Wrappers</RootNamespace>
-    <AssemblyName>Wrappers</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>WrapThat.SystemIO</RootNamespace>
+    <AssemblyName>WrapThat.System</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,11 +41,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Console.g.cs" />
+    <Compile Include="ConsoleInterface.g.cs" />
     <Compile Include="Directory.g.cs" />
     <Compile Include="DirectoryInterface.g.cs" />
     <Compile Include="File.g.cs" />
     <Compile Include="FileInterface.g.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SystemIO.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
