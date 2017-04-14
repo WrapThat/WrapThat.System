@@ -50,7 +50,7 @@ namespace GenerateWrappers
             Assert.That(mydoc, Is.Not.Null);
             var searchterm = $"M:System.IO.{name}.";
 
-            ProcessMethods(name, "System.IO", mydoc, searchterm, methods, outputInterface, outputClass);
+            ProcessStaticMethods(name, "System.IO", mydoc, searchterm, methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -76,7 +76,7 @@ namespace GenerateWrappers
             Assert.That(mydoc, Is.Not.Null);
             var searchterm = $"M:System.{name}.";
 
-            ProcessMethods(name, "System", mydoc, searchterm, methods, outputInterface, outputClass);
+            ProcessStaticMethods(name, "System", mydoc, searchterm, methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -103,91 +103,101 @@ namespace GenerateWrappers
             return mydoc;
         }
 
-        private static void ProcessMethods(string name, string theNamespace, doc mydoc, string searchterm, IEnumerable<MethodInfo> methods, ICollection<string> outputInterface,
+        private static void ProcessStaticMethods(string name, string theNamespace, doc mydoc, string searchterm, IEnumerable<MethodInfo> methods, ICollection<string> outputInterface,
             ICollection<string> outputClass)
         {
             var start = searchterm.Length;
-            foreach (var member in mydoc.members.Where(o => o.name.Contains(searchterm)))
+            var docMethods = mydoc.members.Where(o => o.name.Contains(searchterm));
+            foreach (var member in methods)// mydoc.members.Where(o => o.name.Contains(searchterm)))
             {
-                var hasparams = member.name.IndexOf("(");
-                var def = hasparams >= 0
-                    ? member.name.Substring(start, hasparams - start)
-                    : member.name.Substring(start);
-                var returns = ExtractReturn(def, member, methods);
-                var parameterList = "(";
-                var callList = "(";
-                if (hasparams >= 0)
+                var methodName = member.Name;
+                var returns = ExtractReturn(member);
+                var parameters = member.GetParameters();
+                bool haveDoc = true;
+                var docInfo = docMethods.Where(o => o.name == methodName && o.param.Length == parameters.Length).ToList();
+
+                var paramList = BuildParamList(parameters, docInfo, methodName);
+                var hasParams = parameters.Length >= 1;
+                var parameterList = "";
+                var callList = "";
+                if (hasParams)
                 {
-                    var pt1 = member.name.IndexOf("(") + 1;
-                    var pt2 = member.name.IndexOf(")");
-                    var ptl = pt2 - pt1;
-                    var paramliststring = CreateParameterList(member, pt1, ptl);
-                    var paramtypes = paramliststring.Split(',');
-                    Assert.That(paramtypes.Length, Is.EqualTo(member.param.Length));
-
-                    int n = 0;
-                    foreach (var param in member.param)
-                    {
-                        Assert.That(param.name, Does.Not.Contains("("), $"param is: {param}");
-                        if (n > 0)
-                        {
-                            parameterList += ",";
-                            callList += ",";
-                        }
-                        parameterList += paramtypes[n] + " " + param.name;
-                        callList += param.name;
-                        n++;
-                    }
+                    parameterList = CreateParameterList(paramList);
+                    callList = CreateCallList(paramList);
                 }
-                parameterList += ")";
-                callList += ")";
 
-                var interfaceLine = returns + " " + def + parameterList + ";";
+                var interfaceLine = $"{returns} {methodName}({parameterList});";
                 outputInterface.Add(interfaceLine);
-                var classLine = "public " + returns + " " + def + parameterList + " => " + $"{theNamespace}.{name}." + def +
-                                callList + ";";
+                var classLine = $"public {returns} {methodName}({parameterList})  => {theNamespace}.{name}.{methodName}({callList});";
                 outputClass.Add(classLine);
-                if (member.name.Contains("CreateDirectory"))
-                {
-                    Assert.That(def, Does.Not.Contains("("), $"def: {def}");
-                    Assert.That(parameterList, Does.Not.Contains("(("), $"def: {parameterList}");
-                    Assert.That(returns, Does.Not.Contain("M:"), $"returns: {returns}");
-                    Assert.That(callList.StartsWith("("), $"calllist: {callList}");
+                //if (member.name.Contains("CreateDirectory"))
+                //{
+                //    Assert.That(methodName, Does.Not.Contains("("), $"def: {methodName}");
+                //    Assert.That(parameterList, Does.Not.Contains("(("), $"def: {parameterList}");
+                //    Assert.That(returns, Does.Not.Contain("M:"), $"returns: {returns}");
+                //    Assert.That(callList.StartsWith("("), $"calllist: {callList}");
 
-                }
-                if (member.name.Contains("Exists"))
-                {
-                    Assert.That(returns, Is.EqualTo("bool"), $"return type was {returns}");
-                }
+                //}
+                //if (member.name.Contains("Exists"))
+                //{
+                //    Assert.That(returns, Is.EqualTo("bool"), $"return type was {returns}");
+                //}
             }
         }
 
-        private static string ExtractReturn(string def, memberType member, IEnumerable<MethodInfo> methods)
+        private static string CreateCallList(IEnumerable<Parameter> paramList)
         {
-
-            var method = methods.FirstOrDefault(o => o.Name == def);
-            var rets = method.ReturnParameter.ParameterType.FullName;
-            return ReplaceSystemTypes(rets);
-            string returns = "void ";
-            var txt = member.returns?.see?.cref;
-            if (txt != null)
-                returns = txt.Substring(txt.IndexOf(":") + 1) + " ";
-            else
+            var sb = new StringBuilder();
+            int n = 0;
+            foreach (var param in paramList)
             {
-                var first = member.returns?.Text.FirstOrDefault();
-                if (first == null)
-                    return returns;
-                if (first.StartsWith("true") || first.StartsWith("false"))
-                    return "bool ";
+                if (n > 0)
+                    sb.Append(",");
+                sb.Append(param.Name);
+                n++;
             }
-            return returns;
+            return sb.ToString();
         }
 
-        private static string CreateParameterList(memberType member, int pt1, int ptl)
+        private static IEnumerable<Parameter> BuildParamList(IReadOnlyCollection<ParameterInfo> parameters, IReadOnlyCollection<memberType> docInfo, string methodName)
         {
-            var paramliststring = member.name.Substring(pt1, ptl).Replace("System.String", "string");
-            paramliststring = ReplaceSystemTypes(paramliststring);
-            return paramliststring;
+            var list = new List<Parameter>();
+            bool haveDoc = true;
+            if (docInfo.Count != 1)
+            {
+                if (!docInfo.Any())
+                    haveDoc = false;
+                else
+                    Assert.Fail($"Found multiple methods ({docInfo.Count} )of name {methodName} with {parameters.Count} parameters");
+            }
+            foreach (var parameter in parameters)
+            {
+                var pt = new Parameter { Type = ReplaceSystemTypes(parameter.ParameterType.FullName), Name = parameter.Name };
+                list.Add(pt);
+            }
+            return list;
+        }
+
+        private static string ExtractReturn(MethodInfo member)
+        {
+            var retType = member.ReturnType.FullName;
+            return ReplaceSystemTypes(retType);
+        }
+
+        private static string CreateParameterList(IEnumerable<Parameter> paramSet)
+        {
+            var sb = new StringBuilder();
+            int n = 0;
+            foreach (var param in paramSet)
+            {
+                if (n > 0)
+                    sb.Append(",");
+                sb.Append(param.Type);
+                sb.Append(" ");
+                sb.Append(param.Name);
+                n++;
+            }
+            return sb.ToString();
         }
 
         private static string ReplaceSystemTypes(string paramliststring)
@@ -209,5 +219,11 @@ namespace GenerateWrappers
                     .Replace("System.String[]", "string[]");
             return paramliststring;
         }
+    }
+
+    public class Parameter
+    {
+        public string Type { get; set; }
+        public string Name { get; set; }
     }
 }
