@@ -162,14 +162,6 @@ namespace GenerateWrappers
         private static IEnumerable<Parameter> BuildParamList(IReadOnlyCollection<ParameterInfo> parameters, IReadOnlyCollection<memberType> docInfo, string methodName)
         {
             var list = new List<Parameter>();
-            bool haveDoc = true;
-            if (docInfo.Count != 1)
-            {
-                if (!docInfo.Any())
-                    haveDoc = false;
-                else
-                    Assert.Fail($"Found multiple methods ({docInfo.Count} )of name {methodName} with {parameters.Count} parameters");
-            }
             foreach (var parameter in parameters)
             {
                 var pt = new Parameter { Type = ReplaceSystemTypes(parameter.ParameterType.FullName), Name = parameter.Name };
@@ -180,6 +172,20 @@ namespace GenerateWrappers
 
         private static string ExtractReturn(MethodInfo member)
         {
+            if (member.ReturnType.IsGenericType)
+            {
+                var gtype = member.ReturnType.Name.Replace("`1", "");
+                var atypes = member.ReturnType.GenericTypeArguments;
+                var sb = new StringBuilder();
+                int n = 0;
+                foreach (var t in atypes)
+                {
+                    if (n > 0)
+                        sb.Append(",");
+                    sb.Append(ReplaceSystemTypes(t.FullName));
+                }
+                return $"{gtype}<{sb}>";
+            }
             var retType = member.ReturnType.FullName;
             return ReplaceSystemTypes(retType);
         }
