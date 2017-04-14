@@ -13,7 +13,7 @@ namespace GenerateWrappers
 {
     public class WrapperGenerator
     {
-      
+
         [Test]
         public void CheckThatMscorlibXmlExist()
         {
@@ -21,11 +21,21 @@ namespace GenerateWrappers
             Assert.That(File.Exists(path));
         }
 
-     
-        [TestCase("File")]
-        [TestCase("Directory")]
-        public void GenerateWrappersForStaticsInSystemIO(string name)
+
+        [Test]
+        public void ReflectOnType()
         {
+            var dir = typeof(System.IO.Directory).GetMembers(BindingFlags.Static | BindingFlags.Public);
+            var findExist = dir.FirstOrDefault(o => o.Name == "Exists");
+            Assert.That(findExist, Is.Not.Null);
+        }
+
+
+        [TestCase("File", typeof(File))]
+        [TestCase("Directory", typeof(System.IO.Directory))]
+        public void GenerateWrappersForStaticsInSystemIO(string name, Type type)
+        {
+            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToList();
             var outputInterface = new List<string> { $"// WrapThat library for System.IO.{name}", "  ", "namespace WrapThat.SystemIO {", " ", $"public partial interface I{name}", "{" };
             var outputClass = new List<string>
             {
@@ -39,8 +49,8 @@ namespace GenerateWrappers
             var mydoc = ExtractXmlDefinitions();
             Assert.That(mydoc, Is.Not.Null);
             var searchterm = $"M:System.IO.{name}.";
-           
-            ProcessMethods(name, "System.IO",mydoc, searchterm, outputInterface, outputClass);
+
+            ProcessMethods(name, "System.IO", mydoc, searchterm, methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -48,9 +58,10 @@ namespace GenerateWrappers
 
 
         [Explicit]
-        [TestCase("Console")]
-        public void GenerateWrappersForStaticsInSystem(string name)
+        [TestCase("Console", typeof(System.Console))]
+        public void GenerateWrappersForStaticsInSystem(string name, Type type)
         {
+            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToList();
             var outputInterface = new List<string> { $"// WrapThat library for System.{name}", "  ", "namespace WrapThat.SystemBase {", " ", $"public partial interface I{name}", "{" };
             var outputClass = new List<string>
             {
@@ -65,7 +76,7 @@ namespace GenerateWrappers
             Assert.That(mydoc, Is.Not.Null);
             var searchterm = $"M:System.{name}.";
 
-            ProcessMethods(name, "System", mydoc, searchterm, outputInterface, outputClass);
+            ProcessMethods(name, "System", mydoc, searchterm, methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -88,11 +99,11 @@ namespace GenerateWrappers
         {
             var pathIS = @"C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\mscorlib.xml";
             var serializer = new XmlSerializer(typeof(doc));
-            var mydoc = (doc) serializer.Deserialize(new XmlTextReader(pathIS));
+            var mydoc = (doc)serializer.Deserialize(new XmlTextReader(pathIS));
             return mydoc;
         }
 
-        private static void ProcessMethods(string name, string theNamespace, doc mydoc, string searchterm,  ICollection<string> outputInterface,
+        private static void ProcessMethods(string name, string theNamespace, doc mydoc, string searchterm, IEnumerable<MethodInfo> methods, ICollection<string> outputInterface,
             ICollection<string> outputClass)
         {
             var start = searchterm.Length;
@@ -102,7 +113,7 @@ namespace GenerateWrappers
                 var def = hasparams >= 0
                     ? member.name.Substring(start, hasparams - start)
                     : member.name.Substring(start);
-                var returns = ExtractReturn(member);
+                var returns = ExtractReturn(def, member, methods);
                 var parameterList = "(";
                 var callList = "(";
                 if (hasparams >= 0)
@@ -131,9 +142,9 @@ namespace GenerateWrappers
                 parameterList += ")";
                 callList += ")";
 
-                var interfaceLine = returns + def + parameterList + ";";
+                var interfaceLine = returns + " " + def + parameterList + ";";
                 outputInterface.Add(interfaceLine);
-                var classLine = "public " + returns + def + parameterList + " => " + $"{theNamespace}.{name}." + def +
+                var classLine = "public " + returns + " " + def + parameterList + " => " + $"{theNamespace}.{name}." + def +
                                 callList + ";";
                 outputClass.Add(classLine);
                 if (member.name.Contains("CreateDirectory"))
@@ -146,13 +157,17 @@ namespace GenerateWrappers
                 }
                 if (member.name.Contains("Exists"))
                 {
-                    Assert.That(returns, Is.EqualTo("bool "), $"return type was {returns}");
+                    Assert.That(returns, Is.EqualTo("bool"), $"return type was {returns}");
                 }
             }
         }
 
-        private static string ExtractReturn(memberType member)
+        private static string ExtractReturn(string def, memberType member, IEnumerable<MethodInfo> methods)
         {
+
+            var method = methods.FirstOrDefault(o => o.Name == def);
+            var rets = method.ReturnParameter.ParameterType.FullName;
+            return ReplaceSystemTypes(rets);
             string returns = "void ";
             var txt = member.returns?.see?.cref;
             if (txt != null)
@@ -171,6 +186,12 @@ namespace GenerateWrappers
         private static string CreateParameterList(memberType member, int pt1, int ptl)
         {
             var paramliststring = member.name.Substring(pt1, ptl).Replace("System.String", "string");
+            paramliststring = ReplaceSystemTypes(paramliststring);
+            return paramliststring;
+        }
+
+        private static string ReplaceSystemTypes(string paramliststring)
+        {
             paramliststring =
                 paramliststring.Replace("System.Int32", "int")
                     .Replace("System.Int64", "long")
@@ -182,7 +203,10 @@ namespace GenerateWrappers
                     .Replace("System.Double", "double")
                     .Replace("System.Boolean", "bool")
                     .Replace("System.UInt32", "uint")
-                    .Replace("System.UInt64", "ulong");
+                    .Replace("System.UInt64", "ulong")
+                    .Replace("System.Void", "void")
+                    .Replace("System.String", "string")
+                    .Replace("System.String[]", "string[]");
             return paramliststring;
         }
     }

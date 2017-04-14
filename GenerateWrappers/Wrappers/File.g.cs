@@ -6,13 +6,13 @@ public partial class File: IFile
 {
 public void AppendAllText(string path,string contents) => System.IO.File.AppendAllText(path,contents);
 public void AppendAllText(string path,string contents,System.Text.Encoding encoding) => System.IO.File.AppendAllText(path,contents,encoding);
-public void AppendText(string path) => System.IO.File.AppendText(path);
+public System.IO.StreamWriter AppendText(string path) => System.IO.File.AppendText(path);
 public void Copy(string sourceFileName,string destFileName) => System.IO.File.Copy(sourceFileName,destFileName);
 public void Copy(string sourceFileName,string destFileName,bool overwrite) => System.IO.File.Copy(sourceFileName,destFileName,overwrite);
 public System.IO.FileStream Create(string path) => System.IO.File.Create(path);
 public System.IO.FileStream Create(string path,int bufferSize) => System.IO.File.Create(path,bufferSize);
-public void Create(string path,int bufferSize,System.IO.FileOptions options) => System.IO.File.Create(path,bufferSize,options);
-public void Create(string path,int bufferSize,System.IO.FileOptions options,System.Security.AccessControl.FileSecurity fileSecurity) => System.IO.File.Create(path,bufferSize,options,fileSecurity);
+public System.IO.FileStream Create(string path,int bufferSize,System.IO.FileOptions options) => System.IO.File.Create(path,bufferSize,options);
+public System.IO.FileStream Create(string path,int bufferSize,System.IO.FileOptions options,System.Security.AccessControl.FileSecurity fileSecurity) => System.IO.File.Create(path,bufferSize,options,fileSecurity);
 public System.IO.StreamWriter CreateText(string path) => System.IO.File.CreateText(path);
 public void Decrypt(string path) => System.IO.File.Decrypt(path);
 public void Delete(string path) => System.IO.File.Delete(path);
@@ -34,11 +34,11 @@ public System.IO.FileStream Open(string path,System.IO.FileMode mode,System.IO.F
 public System.IO.FileStream OpenRead(string path) => System.IO.File.OpenRead(path);
 public System.IO.StreamReader OpenText(string path) => System.IO.File.OpenText(path);
 public System.IO.FileStream OpenWrite(string path) => System.IO.File.OpenWrite(path);
-public void ReadAllBytes(string path) => System.IO.File.ReadAllBytes(path);
-public void ReadAllLines(string path) => System.IO.File.ReadAllLines(path);
-public void ReadAllLines(string path,System.Text.Encoding encoding) => System.IO.File.ReadAllLines(path,encoding);
-public void ReadAllText(string path) => System.IO.File.ReadAllText(path);
-public void ReadAllText(string path,System.Text.Encoding encoding) => System.IO.File.ReadAllText(path,encoding);
+public System.Byte[] ReadAllBytes(string path) => System.IO.File.ReadAllBytes(path);
+public string[] ReadAllLines(string path) => System.IO.File.ReadAllLines(path);
+public string[] ReadAllLines(string path,System.Text.Encoding encoding) => System.IO.File.ReadAllLines(path,encoding);
+public string ReadAllText(string path) => System.IO.File.ReadAllText(path);
+public string ReadAllText(string path,System.Text.Encoding encoding) => System.IO.File.ReadAllText(path,encoding);
 public void Replace(string sourceFileName,string destinationFileName,string destinationBackupFileName) => System.IO.File.Replace(sourceFileName,destinationFileName,destinationBackupFileName);
 public void Replace(string sourceFileName,string destinationFileName,string destinationBackupFileName,bool ignoreMetadataErrors) => System.IO.File.Replace(sourceFileName,destinationFileName,destinationBackupFileName,ignoreMetadataErrors);
 public void SetAccessControl(string path,System.Security.AccessControl.FileSecurity fileSecurity) => System.IO.File.SetAccessControl(path,fileSecurity);

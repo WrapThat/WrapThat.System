@@ -6,13 +6,13 @@ public partial interface IFile
 {
 void AppendAllText(string path,string contents);
 void AppendAllText(string path,string contents,System.Text.Encoding encoding);
-void AppendText(string path);
+System.IO.StreamWriter AppendText(string path);
 void Copy(string sourceFileName,string destFileName);
 void Copy(string sourceFileName,string destFileName,bool overwrite);
 System.IO.FileStream Create(string path);
 System.IO.FileStream Create(string path,int bufferSize);
-void Create(string path,int bufferSize,System.IO.FileOptions options);
-void Create(string path,int bufferSize,System.IO.FileOptions options,System.Security.AccessControl.FileSecurity fileSecurity);
+System.IO.FileStream Create(string path,int bufferSize,System.IO.FileOptions options);
+System.IO.FileStream Create(string path,int bufferSize,System.IO.FileOptions options,System.Security.AccessControl.FileSecurity fileSecurity);
 System.IO.StreamWriter CreateText(string path);
 void Decrypt(string path);
 void Delete(string path);
@@ -34,11 +34,11 @@ System.IO.FileStream Open(string path,System.IO.FileMode mode,System.IO.FileAcce
 System.IO.FileStream OpenRead(string path);
 System.IO.StreamReader OpenText(string path);
 System.IO.FileStream OpenWrite(string path);
-void ReadAllBytes(string path);
-void ReadAllLines(string path);
-void ReadAllLines(string path,System.Text.Encoding encoding);
-void ReadAllText(string path);
-void ReadAllText(string path,System.Text.Encoding encoding);
+System.Byte[] ReadAllBytes(string path);
+string[] ReadAllLines(string path);
+string[] ReadAllLines(string path,System.Text.Encoding encoding);
+string ReadAllText(string path);
+string ReadAllText(string path,System.Text.Encoding encoding);
 void Replace(string sourceFileName,string destinationFileName,string destinationBackupFileName);
 void Replace(string sourceFileName,string destinationFileName,string destinationBackupFileName,bool ignoreMetadataErrors);
 void SetAccessControl(string path,System.Security.AccessControl.FileSecurity fileSecurity);

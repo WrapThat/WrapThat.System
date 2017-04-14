@@ -2,7 +2,7 @@
 <package>
   <metadata>
     <id>WrapThat.System</id>
-    <version>0.1.1.0</version>
+    <version>0.1.5.0</version>
     <title>WrapThat System</title>
     <authors>Terje Sandstrom</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

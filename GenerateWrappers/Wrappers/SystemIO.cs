@@ -4,14 +4,14 @@ namespace WrapThat.SystemIO
 {
     public interface ISystemIO
     {
-        Directory Directory { get; }
-        File File { get; }
+        IDirectory Directory { get; }
+        IFile File { get; }
     }
 
     public class SystemIO : ISystemIO
     {
-        public Directory Directory { get; } =  new Directory();
-        public File File { get;  } = new File();
+        public IDirectory Directory { get; } =  new Directory();
+        public IFile File { get;  } = new File();
 
     }
 }
