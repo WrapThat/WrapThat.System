@@ -1,5 +1,7 @@
 // WrapThat library for System.IO.Directory
   
+using System.Collections.Generic;
+ 
 namespace WrapThat.SystemIO {
  
 public partial class Directory: IDirectory 
@@ -32,15 +34,15 @@ public string[] GetDirectories(string path,string searchPattern,System.IO.Search
 public string[] GetFileSystemEntries(string path)  => System.IO.Directory.GetFileSystemEntries(path);
 public string[] GetFileSystemEntries(string path,string searchPattern)  => System.IO.Directory.GetFileSystemEntries(path,searchPattern);
 public string[] GetFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.GetFileSystemEntries(path,searchPattern,searchOption);
-public IEnumerable<System.String> EnumerateDirectories(string path)  => System.IO.Directory.EnumerateDirectories(path);
-public IEnumerable<System.String> EnumerateDirectories(string path,string searchPattern)  => System.IO.Directory.EnumerateDirectories(path,searchPattern);
-public IEnumerable<System.String> EnumerateDirectories(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateDirectories(path,searchPattern,searchOption);
-public IEnumerable<System.String> EnumerateFiles(string path)  => System.IO.Directory.EnumerateFiles(path);
-public IEnumerable<System.String> EnumerateFiles(string path,string searchPattern)  => System.IO.Directory.EnumerateFiles(path,searchPattern);
-public IEnumerable<System.String> EnumerateFiles(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateFiles(path,searchPattern,searchOption);
-public IEnumerable<System.String> EnumerateFileSystemEntries(string path)  => System.IO.Directory.EnumerateFileSystemEntries(path);
-public IEnumerable<System.String> EnumerateFileSystemEntries(string path,string searchPattern)  => System.IO.Directory.EnumerateFileSystemEntries(path,searchPattern);
-public IEnumerable<System.String> EnumerateFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateFileSystemEntries(path,searchPattern,searchOption);
+public IEnumerable<string> EnumerateDirectories(string path)  => System.IO.Directory.EnumerateDirectories(path);
+public IEnumerable<string> EnumerateDirectories(string path,string searchPattern)  => System.IO.Directory.EnumerateDirectories(path,searchPattern);
+public IEnumerable<string> EnumerateDirectories(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateDirectories(path,searchPattern,searchOption);
+public IEnumerable<string> EnumerateFiles(string path)  => System.IO.Directory.EnumerateFiles(path);
+public IEnumerable<string> EnumerateFiles(string path,string searchPattern)  => System.IO.Directory.EnumerateFiles(path,searchPattern);
+public IEnumerable<string> EnumerateFiles(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateFiles(path,searchPattern,searchOption);
+public IEnumerable<string> EnumerateFileSystemEntries(string path)  => System.IO.Directory.EnumerateFileSystemEntries(path);
+public IEnumerable<string> EnumerateFileSystemEntries(string path,string searchPattern)  => System.IO.Directory.EnumerateFileSystemEntries(path,searchPattern);
+public IEnumerable<string> EnumerateFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.EnumerateFileSystemEntries(path,searchPattern,searchOption);
 public string[] GetLogicalDrives()  => System.IO.Directory.GetLogicalDrives();
 public string GetDirectoryRoot(string path)  => System.IO.Directory.GetDirectoryRoot(path);
 public string GetCurrentDirectory()  => System.IO.Directory.GetCurrentDirectory();

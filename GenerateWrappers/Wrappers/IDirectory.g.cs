@@ -1,6 +1,7 @@
 // WrapThat library for System.IO.Directory
-  using System.Collections.Generic;
-
+  
+using System.Collections.Generic;
+ 
 namespace WrapThat.SystemIO {
  
 public partial interface IDirectory
@@ -33,15 +34,15 @@ string[] GetDirectories(string path,string searchPattern,System.IO.SearchOption 
 string[] GetFileSystemEntries(string path);
 string[] GetFileSystemEntries(string path,string searchPattern);
 string[] GetFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption);
-IEnumerable<System.String> EnumerateDirectories(string path);
-IEnumerable<System.String> EnumerateDirectories(string path,string searchPattern);
-IEnumerable<System.String> EnumerateDirectories(string path,string searchPattern,System.IO.SearchOption searchOption);
-IEnumerable<System.String> EnumerateFiles(string path);
-IEnumerable<System.String> EnumerateFiles(string path,string searchPattern);
-IEnumerable<System.String> EnumerateFiles(string path,string searchPattern,System.IO.SearchOption searchOption);
-IEnumerable<System.String> EnumerateFileSystemEntries(string path);
-IEnumerable<System.String> EnumerateFileSystemEntries(string path,string searchPattern);
-IEnumerable<System.String> EnumerateFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption);
+IEnumerable<string> EnumerateDirectories(string path);
+IEnumerable<string> EnumerateDirectories(string path,string searchPattern);
+IEnumerable<string> EnumerateDirectories(string path,string searchPattern,System.IO.SearchOption searchOption);
+IEnumerable<string> EnumerateFiles(string path);
+IEnumerable<string> EnumerateFiles(string path,string searchPattern);
+IEnumerable<string> EnumerateFiles(string path,string searchPattern,System.IO.SearchOption searchOption);
+IEnumerable<string> EnumerateFileSystemEntries(string path);
+IEnumerable<string> EnumerateFileSystemEntries(string path,string searchPattern);
+IEnumerable<string> EnumerateFileSystemEntries(string path,string searchPattern,System.IO.SearchOption searchOption);
 string[] GetLogicalDrives();
 string GetDirectoryRoot(string path);
 string GetCurrentDirectory();

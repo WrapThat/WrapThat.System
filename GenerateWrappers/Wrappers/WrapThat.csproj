@@ -44,13 +44,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Console.g.cs" />
-    <Compile Include="ConsoleInterface.g.cs" />
     <Compile Include="Directory.cs" />
     <Compile Include="Directory.g.cs" />
-    <Compile Include="DirectoryInterface.g.cs" />
     <Compile Include="File.g.cs" />
-    <Compile Include="FileInterface.g.cs" />
+    <Compile Include="IConsole.g.cs" />
     <Compile Include="IDirectory.cs" />
+    <Compile Include="IDirectory.g.cs" />
+    <Compile Include="IFile.g.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SystemIO.cs" />
   </ItemGroup>

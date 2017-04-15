@@ -36,11 +36,23 @@ namespace GenerateWrappers
         public void GenerateWrappersForStaticsInSystemIO(string name, Type type)
         {
             var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToList();
-            var outputInterface = new List<string> { $"// WrapThat library for System.IO.{name}", "  ", "namespace WrapThat.SystemIO {", " ", $"public partial interface I{name}", "{" };
+            var outputInterface = new List<string>
+            {
+                $"// WrapThat library for System.IO.{name}",
+                "  ",
+                "using System.Collections.Generic;",
+                " ",
+                "namespace WrapThat.SystemIO {",
+                " ",
+                $"public partial interface I{name}",
+                "{"
+            };
             var outputClass = new List<string>
             {
                 $"// WrapThat library for System.IO.{name}",
                 "  ",
+                "using System.Collections.Generic;",
+                " ",
                 "namespace WrapThat.SystemIO {",
                 " ",
                 $"public partial class {name}: I{name} ",
@@ -48,9 +60,8 @@ namespace GenerateWrappers
             };
             var mydoc = ExtractXmlDefinitions();
             Assert.That(mydoc, Is.Not.Null);
-            var searchterm = $"M:System.IO.{name}.";
 
-            ProcessStaticMethods(name, "System.IO", mydoc, searchterm, methods, outputInterface, outputClass);
+            ProcessStaticMethods(name, "System.IO", methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -61,12 +72,16 @@ namespace GenerateWrappers
         [TestCase("Console", typeof(System.Console))]
         public void GenerateWrappersForStaticsInSystem(string name, Type type)
         {
-            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public).ToList();
-            var outputInterface = new List<string> { $"// WrapThat library for System.{name}", "  ", "namespace WrapThat.SystemBase {", " ", $"public partial interface I{name}", "{" };
+            var methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public).
+                Where(o=>!o.Name.Contains("get_") && !o.Name.Contains("set_") && !o.Name.Contains("add_") && !o.Name.Contains("remove_")).ToList();
+            var outputInterface = new List<string> { $"// WrapThat library for System.{name}", "  ",  "using System.Collections.Generic;",
+                " ", "namespace WrapThat.SystemBase {", " ", $"public partial interface I{name}", "{" };
             var outputClass = new List<string>
             {
                 $"// WrapThat library for System.{name}  (Namespace is SystemBase in order to avoid conflicts with using System)",
                 "  ",
+                  "using System.Collections.Generic;",
+                " ",
                 "namespace WrapThat.SystemBase {",
                 " ",
                 $"public partial class {name}: I{name} ",
@@ -74,9 +89,8 @@ namespace GenerateWrappers
             };
             var mydoc = ExtractXmlDefinitions();
             Assert.That(mydoc, Is.Not.Null);
-            var searchterm = $"M:System.{name}.";
 
-            ProcessStaticMethods(name, "System", mydoc, searchterm, methods, outputInterface, outputClass);
+            ProcessStaticMethods(name, "System", methods, outputInterface, outputClass);
             Assert.That(outputInterface.Count, Is.GreaterThan(6));
             Assert.That(outputClass.Count, Is.GreaterThan(6));
             WriteOutput(name, outputInterface, outputClass);
@@ -89,7 +103,7 @@ namespace GenerateWrappers
             outputInterface.Add("}}");
             outputClass.Add("}}");
             var path = TestContext.CurrentContext.TestDirectory;
-            var pathI = Path.Combine(path, @"..\..\..\Wrappers", $"{name}Interface.g.cs");
+            var pathI = Path.Combine(path, @"..\..\..\Wrappers", $"I{name}.g.cs");
             var pathC = Path.Combine(path, @"..\..\..\Wrappers", $"{name}.g.cs");
             File.WriteAllLines(pathI, outputInterface);
             File.WriteAllLines(pathC, outputClass);
@@ -103,20 +117,17 @@ namespace GenerateWrappers
             return mydoc;
         }
 
-        private static void ProcessStaticMethods(string name, string theNamespace, doc mydoc, string searchterm, IEnumerable<MethodInfo> methods, ICollection<string> outputInterface,
+        private static void ProcessStaticMethods(string name, string theNamespace, IEnumerable<MethodInfo> methods, ICollection<string> outputInterface,
             ICollection<string> outputClass)
         {
-            var start = searchterm.Length;
-            var docMethods = mydoc.members.Where(o => o.name.Contains(searchterm));
-            foreach (var member in methods)// mydoc.members.Where(o => o.name.Contains(searchterm)))
+            foreach (var member in methods)
             {
                 var methodName = member.Name;
                 var returns = ExtractReturn(member);
                 var parameters = member.GetParameters();
                 bool haveDoc = true;
-                var docInfo = docMethods.Where(o => o.name == methodName && o.param.Length == parameters.Length).ToList();
 
-                var paramList = BuildParamList(parameters, docInfo, methodName);
+                var paramList = BuildParamList(parameters).ToList();
                 var hasParams = parameters.Length >= 1;
                 var parameterList = "";
                 var callList = "";
@@ -130,18 +141,7 @@ namespace GenerateWrappers
                 outputInterface.Add(interfaceLine);
                 var classLine = $"public {returns} {methodName}({parameterList})  => {theNamespace}.{name}.{methodName}({callList});";
                 outputClass.Add(classLine);
-                //if (member.name.Contains("CreateDirectory"))
-                //{
-                //    Assert.That(methodName, Does.Not.Contains("("), $"def: {methodName}");
-                //    Assert.That(parameterList, Does.Not.Contains("(("), $"def: {parameterList}");
-                //    Assert.That(returns, Does.Not.Contain("M:"), $"returns: {returns}");
-                //    Assert.That(callList.StartsWith("("), $"calllist: {callList}");
-
-                //}
-                //if (member.name.Contains("Exists"))
-                //{
-                //    Assert.That(returns, Is.EqualTo("bool"), $"return type was {returns}");
-                //}
+                
             }
         }
 
@@ -159,13 +159,36 @@ namespace GenerateWrappers
             return sb.ToString();
         }
 
-        private static IEnumerable<Parameter> BuildParamList(IReadOnlyCollection<ParameterInfo> parameters, IReadOnlyCollection<memberType> docInfo, string methodName)
+        private static IEnumerable<Parameter> BuildParamList(IReadOnlyCollection<ParameterInfo> parameters)
         {
             var list = new List<Parameter>();
             foreach (var parameter in parameters)
             {
-                var pt = new Parameter { Type = ReplaceSystemTypes(parameter.ParameterType.FullName), Name = parameter.Name };
-                list.Add(pt);
+                if (parameter.ParameterType.IsGenericType)
+                {
+                    var gtype = parameter.ParameterType.Name.Replace("`1", "");
+                    var atypes = parameter.ParameterType.GenericTypeArguments;
+                    var sb = new StringBuilder();
+                    int n = 0;
+                    foreach (var t in atypes)
+                    {
+                        if (n > 0)
+                            sb.Append(",");
+                        sb.Append(ReplaceSystemTypes(t.FullName));
+                    }
+                    var pt = new Parameter
+                    {
+                        Type = $"{gtype}<{sb}>",
+                        Name = parameter.Name
+
+                    };
+                    list.Add(pt);
+                }
+                else
+                {
+                    var pt = new Parameter { Type = ReplaceSystemTypes(parameter.ParameterType.FullName), Name = parameter.Name };
+                    list.Add(pt);
+                }
             }
             return list;
         }
