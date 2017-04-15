@@ -125,13 +125,10 @@ namespace GenerateWrappers
                 var methodName = member.Name;
                 var returns = ExtractReturn(member);
                 var parameters = member.GetParameters();
-                bool haveDoc = true;
-
                 var paramList = BuildParamList(parameters).ToList();
-                var hasParams = parameters.Length >= 1;
                 var parameterList = "";
                 var callList = "";
-                if (hasParams)
+                if (parameters.Length >= 1)
                 {
                     parameterList = CreateParameterList(paramList);
                     callList = CreateCallList(paramList);
@@ -168,14 +165,7 @@ namespace GenerateWrappers
                 {
                     var gtype = parameter.ParameterType.Name.Replace("`1", "");
                     var atypes = parameter.ParameterType.GenericTypeArguments;
-                    var sb = new StringBuilder();
-                    int n = 0;
-                    foreach (var t in atypes)
-                    {
-                        if (n > 0)
-                            sb.Append(",");
-                        sb.Append(ReplaceSystemTypes(t.FullName));
-                    }
+                    var sb = BuildGenericTypeString(atypes);
                     var pt = new Parameter
                     {
                         Type = $"{gtype}<{sb}>",
@@ -193,20 +183,27 @@ namespace GenerateWrappers
             return list;
         }
 
+        private static string BuildGenericTypeString(Type[] atypes)
+        {
+            var sb = new StringBuilder();
+            int n = 0;
+            foreach (var t in atypes)
+            {
+                if (n > 0)
+                    sb.Append(",");
+                sb.Append(ReplaceSystemTypes(t.FullName));
+                n++;
+            }
+            return sb.ToString();
+        }
+
         private static string ExtractReturn(MethodInfo member)
         {
             if (member.ReturnType.IsGenericType)
             {
                 var gtype = member.ReturnType.Name.Replace("`1", "");
                 var atypes = member.ReturnType.GenericTypeArguments;
-                var sb = new StringBuilder();
-                int n = 0;
-                foreach (var t in atypes)
-                {
-                    if (n > 0)
-                        sb.Append(",");
-                    sb.Append(ReplaceSystemTypes(t.FullName));
-                }
+                var sb = BuildGenericTypeString(atypes);
                 return $"{gtype}<{sb}>";
             }
             var retType = member.ReturnType.FullName;
