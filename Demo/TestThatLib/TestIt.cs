@@ -89,12 +89,7 @@ namespace TestThatLib
 
         }
 
-        [Test]
-        public void SizeDifference()
-        {
-            var original = new LibUsingFileFunctions.HardToTest.FileHandling();
-            var wrapped = new LibUsingFileFunctions.Wrapped.FileHandling();
-        }
+      
 
     }
 }
