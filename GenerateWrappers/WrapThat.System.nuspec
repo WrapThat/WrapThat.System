@@ -8,7 +8,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/WrapThat/WrapThat.System/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/WrapThat/WrapThat.System</projectUrl>
-    <iconUrl></iconUrl>
+    <iconUrl>https://cdn.rawgit.com/WrapThat/WrapThat.System/c9103ba5/WrapThat.ico</iconUrl>
     <copyright>Terje Sandstrom 2017</copyright>
     <description>Wrapper classes for System and System.IO for making unit testing easier</description>
     <summary>With these classes you can make minimal changes to your code, in order to get it unit testable. Primary target is legacy code where you don't want to change too much, and cant use newer libraries</summary>
@@ -20,6 +20,7 @@
     
   </metadata>
   <files>
+    <file src="..\LICENSE.txt" />
     <file src="Wrappers\bin\release\WrapThat.System.dll" target="lib\" />
   </files>
 </package>
