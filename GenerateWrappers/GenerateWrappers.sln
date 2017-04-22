@@ -10,7 +10,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{28322A0E-D846-457B-BFEC-5786D2F136F3}"
 	ProjectSection(SolutionItems) = preProject
 		Pack.cmd = Pack.cmd
-		ReadMe.md = ReadMe.md
 		Upload.cmd = Upload.cmd
 		WrapThat.System.nuspec = WrapThat.System.nuspec
 	EndProjectSection
