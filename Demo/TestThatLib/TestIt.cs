@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
 using WrapThat.SystemIO;
+using LibUsingFileFunctions.Wrapped;
 
 namespace TestThatLib
 {
@@ -22,7 +23,7 @@ namespace TestThatLib
             systemio.File.Returns(file);
             systemio.Directory.Returns(directory);
 
-            var underTest = new LibUsingFileFunctions.WrappedFileFunctions(systemio);
+            var underTest = new FileHandling(systemio);
 
             // Assume
             var testdir = "someNiceDirectory";
@@ -51,7 +52,7 @@ namespace TestThatLib
             systemio.File.Returns(file);
             systemio.Directory.Returns(directory);
 
-            var underTest = new LibUsingFileFunctions.WrappedFileFunctions(systemio);
+            var underTest = new FileHandling(systemio);
 
             // Assume
             var testdir = "someNiceDirectory";
@@ -68,5 +69,32 @@ namespace TestThatLib
 
             
         }
+
+        [Test]
+        public void ThatFileExistMethodWorks()
+        {
+            // Assume 
+            var file = Substitute.For<IFile>();
+            file.Exists(Arg.Any<string>()).Returns(true);
+            var systemio = Substitute.For<ISystemIO>();
+            systemio.File.Returns(file);
+
+            var  underTest = new FileHandling(systemio);
+
+            // Act
+            var result = underTest.FileExist("whatever");
+
+            // Assert
+            Assert.That(result);
+
+        }
+
+        [Test]
+        public void SizeDifference()
+        {
+            var original = new LibUsingFileFunctions.HardToTest.FileHandling();
+            var wrapped = new LibUsingFileFunctions.Wrapped.FileHandling();
+        }
+
     }
 }

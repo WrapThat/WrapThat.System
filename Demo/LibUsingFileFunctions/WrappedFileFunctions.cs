@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WrapThat.SystemIO;
 using Directory = WrapThat.SystemIO.Directory;
 using File = WrapThat.SystemIO.File;
 
-namespace LibUsingFileFunctions
+namespace LibUsingFileFunctions.Wrapped
 {
 
-    public class WrappedFileFunctions
+    public class FileHandling
     {
         // Add the two properties
         public IDirectory Directory { get;  }
@@ -20,7 +17,7 @@ namespace LibUsingFileFunctions
         
         // Initialize it in the ctor
 
-        public WrappedFileFunctions(ISystemIO systemIo=null)
+        public FileHandling(ISystemIO systemIo=null)
         {
             Directory = systemIo?.Directory ?? new Directory();
             File = systemIo?.File ?? new File();
@@ -41,6 +38,11 @@ namespace LibUsingFileFunctions
                 return "";
             var txt = File.ReadAllText(path);
             return txt;
+        }
+
+        public bool FileExist(string path)
+        {
+            return File.Exists(path);
         }
 
     }
