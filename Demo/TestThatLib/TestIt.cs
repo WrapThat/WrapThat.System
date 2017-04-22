@@ -8,6 +8,7 @@ using NSubstitute;
 using NUnit.Framework;
 using WrapThat.SystemIO;
 using LibUsingFileFunctions.Wrapped;
+using WrapThat.SystemBase;
 
 namespace TestThatLib
 {
@@ -89,7 +90,36 @@ namespace TestThatLib
 
         }
 
-      
+
+        [Test]
+        public void TestWrite()
+        {
+            var console = Substitute.For<IConsole>();
+            
+            var underTest = new ConcoleBasedLib(console);
+
+            underTest.WeWrite();
+
+            console.Received().WriteLine(Arg.Any<string>());
+            
+        }
+
+
+        [Test]
+        public void TestRead()
+        {
+            var console = Substitute.For<IConsole>();
+            console.ReadLine().Returns("Cool stuff");
+
+            var underTest = new ConcoleBasedLib(console);
+
+            underTest.WeRead();
+
+            console.Received().WriteLine("Cool stuff indeed!");
+
+        }
+
+
 
     }
 }

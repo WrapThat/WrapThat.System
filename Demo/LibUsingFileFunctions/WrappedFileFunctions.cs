@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using WrapThat.SystemBase;
 using WrapThat.SystemIO;
 using Directory = WrapThat.SystemIO.Directory;
 using File = WrapThat.SystemIO.File;
@@ -11,13 +12,13 @@ namespace LibUsingFileFunctions.Wrapped
     public class FileHandling
     {
         // Add the two properties
-        public IDirectory Directory { get;  }
+        public IDirectory Directory { get; }
         public IFile File { get; }
 
-        
+
         // Initialize it in the ctor
 
-        public FileHandling(ISystemIO systemIo=null)
+        public FileHandling(ISystemIO systemIo = null)
         {
             Directory = systemIo?.Directory ?? new Directory();
             File = systemIo?.File ?? new File();
@@ -43,6 +44,27 @@ namespace LibUsingFileFunctions.Wrapped
         public bool FileExist(string path)
         {
             return File.Exists(path);
+        }
+
+    }
+
+    public class ConcoleBasedLib
+    {
+        private readonly WrapThat.SystemBase.IConsole Console;
+        public ConcoleBasedLib(WrapThat.SystemBase.IConsole console)
+        {
+            Console = console ?? new Console();
+        }
+
+        public void WeWrite()
+        {
+            Console.WriteLine("Whatever");
+        }
+
+        public void WeRead()
+        {
+            var txt = Console.ReadLine();
+            Console.WriteLine(txt+" indeed!");
         }
 
     }
