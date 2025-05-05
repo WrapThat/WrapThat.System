@@ -8,7 +8,7 @@ public partial interface IDirectory
 {
 System.IO.DirectoryInfo GetParent(string path);
 System.IO.DirectoryInfo CreateDirectory(string path);
-System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity);
+//System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity);
 bool Exists(string path);
 void SetCreationTime(string path,System.DateTime creationTime);
 void SetCreationTimeUtc(string path,System.DateTime creationTimeUtc);
@@ -22,9 +22,9 @@ void SetLastAccessTime(string path,System.DateTime lastAccessTime);
 void SetLastAccessTimeUtc(string path,System.DateTime lastAccessTimeUtc);
 System.DateTime GetLastAccessTime(string path);
 System.DateTime GetLastAccessTimeUtc(string path);
-System.Security.AccessControl.DirectorySecurity GetAccessControl(string path);
-System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections);
-void SetAccessControl(string path,System.Security.AccessControl.DirectorySecurity directorySecurity);
+// System.Security.AccessControl.DirectorySecurity GetAccessControl(string path);
+// System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections);
+// void SetAccessControl(string path,System.Security.AccessControl.DirectorySecurity directorySecurity);
 string[] GetFiles(string path);
 string[] GetFiles(string path,string searchPattern);
 string[] GetFiles(string path,string searchPattern,System.IO.SearchOption searchOption);

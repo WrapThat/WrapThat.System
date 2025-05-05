@@ -2,19 +2,19 @@
 <package>
   <metadata>
     <id>WrapThat.System</id>
-    <version>0.2.0</version>
+    <version>2.0.0</version>
     <title>WrapThat System</title>
     <authors>Terje Sandstrom</authors>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <licenseUrl>https://github.com/WrapThat/WrapThat.System/blob/master/LICENSE.txt</licenseUrl>
     <projectUrl>https://github.com/WrapThat/WrapThat.System</projectUrl>
     <iconUrl>https://cdn.rawgit.com/WrapThat/WrapThat.System/c9103ba5/WrapThat.ico</iconUrl>
-    <copyright>Terje Sandstrom 2017</copyright>
+    <copyright>Terje Sandstrom 2017-2025</copyright>
     <description>Wrapper classes for System and System.IO for making unit testing easier</description>
     <summary>With these classes you can make minimal changes to your code, in order to get it unit testable. Primary target is legacy code where you don't want to change too much, and cant use newer libraries</summary>
     <tags>Unit testing</tags>
     <language>en-US</language>
-    <releaseNotes>Initial early release</releaseNotes>
+    <releaseNotes>Updated to net 8 and 9, and .net fw 4.8</releaseNotes>
     <dependencies>
     </dependencies>
     

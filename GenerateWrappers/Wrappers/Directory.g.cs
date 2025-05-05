@@ -8,7 +8,7 @@ public partial class Directory: IDirectory
 {
 public System.IO.DirectoryInfo GetParent(string path)  => System.IO.Directory.GetParent(path);
 public System.IO.DirectoryInfo CreateDirectory(string path)  => System.IO.Directory.CreateDirectory(path);
-public System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity)  => System.IO.Directory.CreateDirectory(path,directorySecurity);
+// public System.IO.DirectoryInfo CreateDirectory(string path,System.Security.AccessControl.DirectorySecurity directorySecurity)  => System.IO.Directory.CreateDirectory(path,directorySecurity);
 public bool Exists(string path)  => System.IO.Directory.Exists(path);
 public void SetCreationTime(string path,System.DateTime creationTime)  => System.IO.Directory.SetCreationTime(path,creationTime);
 public void SetCreationTimeUtc(string path,System.DateTime creationTimeUtc)  => System.IO.Directory.SetCreationTimeUtc(path,creationTimeUtc);
@@ -22,9 +22,9 @@ public void SetLastAccessTime(string path,System.DateTime lastAccessTime)  => Sy
 public void SetLastAccessTimeUtc(string path,System.DateTime lastAccessTimeUtc)  => System.IO.Directory.SetLastAccessTimeUtc(path,lastAccessTimeUtc);
 public System.DateTime GetLastAccessTime(string path)  => System.IO.Directory.GetLastAccessTime(path);
 public System.DateTime GetLastAccessTimeUtc(string path)  => System.IO.Directory.GetLastAccessTimeUtc(path);
-public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path)  => System.IO.Directory.GetAccessControl(path);
-public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections)  => System.IO.Directory.GetAccessControl(path,includeSections);
-public void SetAccessControl(string path,System.Security.AccessControl.DirectorySecurity directorySecurity)  => System.IO.Directory.SetAccessControl(path,directorySecurity);
+// public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path)  => System.IO.Directory.GetAccessControl(path);
+// public System.Security.AccessControl.DirectorySecurity GetAccessControl(string path,System.Security.AccessControl.AccessControlSections includeSections)  => System.IO.Directory.GetAccessControl(path,includeSections);
+// public void SetAccessControl(string path,System.Security.AccessControl.DirectorySecurity directorySecurity)  => System.IO.Directory.SetAccessControl(path,directorySecurity);
 public string[] GetFiles(string path)  => System.IO.Directory.GetFiles(path);
 public string[] GetFiles(string path,string searchPattern)  => System.IO.Directory.GetFiles(path,searchPattern);
 public string[] GetFiles(string path,string searchPattern,System.IO.SearchOption searchOption)  => System.IO.Directory.GetFiles(path,searchPattern,searchOption);

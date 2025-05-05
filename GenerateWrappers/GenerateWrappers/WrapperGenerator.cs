@@ -13,12 +13,12 @@ namespace GenerateWrappers
 {
     public class WrapperGenerator
     {
+        const string refPath = @"%PROGRAMFILESDIR%Reference Assemblies\Microsoft\Framework\.NETFramework\v4.X\mscorlib.xml";
 
         [Test]
         public void CheckThatMscorlibXmlExist()
         {
-            var path = @"C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\mscorlib.xml";
-            Assert.That(File.Exists(path));
+            Assert.That(File.Exists(refPath));
         }
 
 
@@ -111,9 +111,8 @@ namespace GenerateWrappers
 
         private static doc ExtractXmlDefinitions()
         {
-            var pathIS = @"C:\Windows\Microsoft.NET\Framework\v2.0.50727\en\mscorlib.xml";
             var serializer = new XmlSerializer(typeof(doc));
-            var mydoc = (doc)serializer.Deserialize(new XmlTextReader(pathIS));
+            var mydoc = (doc)serializer.Deserialize(new XmlTextReader(refPath));
             return mydoc;
         }
 

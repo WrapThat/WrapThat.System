@@ -1,65 +1,29 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{37174AB8-C45D-42A4-A551-B3E4C60B4F8C}</ProjectGuid>
+    <TargetFrameworks>net48;net8.0</TargetFrameworks>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>WrapThat.SystemIO</RootNamespace>
     <AssemblyName>WrapThat.System</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
+    <PropertyGroup>
+        <PackageId>WrapThat.System</PackageId>
+        <Version>2.0.0-beta.1</Version>
+        <Title>WrapThat System</Title>
+        <Authors>Terje Sandstrom</Authors>
+        <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+        <LicenseUrl>https://github.com/WrapThat/WrapThat.System/blob/master/LICENSE.txt</LicenseUrl>
+        <PackageProjectUrl>https://github.com/WrapThat/WrapThat.System</PackageProjectUrl>
+        <PackageIconUrl>https://cdn.rawgit.com/WrapThat/WrapThat.System/c9103ba5/WrapThat.ico</PackageIconUrl>
+        <PackageCopyright>Terje Sandstrom 2017-2025</PackageCopyright>
+        <Description>Wrapper classes for System and System.IO for making unit testing easier</Description>
+        <Summary>With these classes you can make minimal changes to your code, in order to get it unit testable. Primary target is legacy code where you don't want to change too much, and cant use newer libraries</Summary>
+        <PackageTags>Unit testing</PackageTags>
+        <Language>en-US</Language>
+        <PackageReleaseNotes>Updated to net 8 and 9, and .net fw 4.8</PackageReleaseNotes>
+    </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Console.g.cs" />
-    <Compile Include="Directory.cs" />
-    <Compile Include="Directory.g.cs" />
-    <Compile Include="File.g.cs" />
-    <Compile Include="IConsole.g.cs" />
-    <Compile Include="IDirectory.cs" />
-    <Compile Include="IDirectory.g.cs" />
-    <Compile Include="IFile.g.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemIO.cs" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
